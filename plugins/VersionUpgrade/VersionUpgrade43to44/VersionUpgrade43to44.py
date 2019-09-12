@@ -49,6 +49,11 @@ class VersionUpgrade43to44(VersionUpgrade):
         # Update version number.
         parser["metadata"]["setting_version"] = "10"
 
+        # Remove materials from HMS434 printers.
+        hms434_extruders = {"hms434_tool_1", "hms434_tool_2", "hms434_tool_3", "hms434_tool_4", "hms434_tool_5", "hms434_tool_6", "hms434_tool_7", "hms434_tool_8"}
+        if "containers" in parser and "6" in parser["containers"] and parser["containers"]["6"] in hms434_extruders:
+            parser["containers"]["3"] = "empty_material"
+
         result = io.StringIO()
         parser.write(result)
         return [filename], [result.getvalue()]
